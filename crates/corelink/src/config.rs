@@ -48,6 +48,38 @@ impl Config {
         Self::from_toml(&raw)
     }
 
+    /// Load config, then apply optional overrides from CLI flags or env vars.
+    ///
+    /// If both `endpoint` and `token` are `Some`, the config file is not required
+    /// (useful for one-shot CI invocations where no config file is present).
+    pub fn load_with_overrides(
+        endpoint: Option<String>,
+        token: Option<String>,
+    ) -> Result<Self> {
+        // Attempt to load the base config; fall back to defaults when overrides
+        // supply both fields so that CI callers need not create a config file.
+        let mut cfg = match (endpoint.as_ref(), token.as_ref()) {
+            (Some(_), Some(_)) => Self {
+                token: String::new(),
+                region: default_region(),
+                endpoint: default_endpoint(),
+            },
+            _ => Self::load()?,
+        };
+        if let Some(ep) = endpoint {
+            cfg.endpoint = ep;
+        }
+        if let Some(tok) = token {
+            cfg.token = tok;
+        }
+        if cfg.token.is_empty() {
+            anyhow::bail!(
+                "no token found — pass --token, set CORELINK_TOKEN, or add `token` to ~/.corelink/config.toml"
+            );
+        }
+        Ok(cfg)
+    }
+
     /// Parse from a TOML string.
     pub fn from_toml(s: &str) -> Result<Self> {
         let cfg: Self = toml::from_str(s).context("invalid TOML in config")?;

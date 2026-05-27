@@ -29,7 +29,7 @@ endpoint = "https://corelink-api.humangr.com"    # optional
 
 | Command              | Description                                                          |
 | -------------------- | -------------------------------------------------------------------- |
-| `corelink ping`      | Health-check the configured cache endpoint.                          |
+| `corelink ping`      | Health-check the endpoint (POSTs to `/v1/ping`). Supports `--endpoint` / `--token` overrides. |
 | `corelink bazel-init`| Idempotently inject a remote-cache stanza into `.bazelrc`.           |
 | `corelink config show` | Print resolved config (token redacted).                            |
 
@@ -55,4 +55,4 @@ Re-running is a no-op when the block is up-to-date.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+Apache-2.0 — see [LICENSE](./LICENSE).
