@@ -47,6 +47,12 @@ build --remote_upload_local_results=true
 
 Re-running is a no-op when the block is up-to-date.
 
+## Status
+
+> **TODO** — `https://corelink-api.humangr.com/v1/ping` currently returns 404. The
+> control-plane endpoint will go live alongside Wave 32 production deploy. Until then,
+> point `endpoint` in `~/.corelink/config.toml` at your dev/staging URL.
+
 ## License
 
 MIT — see [LICENSE](./LICENSE).
